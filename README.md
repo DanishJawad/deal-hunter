@@ -30,20 +30,6 @@ User types a query in Streamlit
   -> show best deal first with store links
 ```
 
-## Architecture
-
-```mermaid
-flowchart TD
-      User[User] --> UI[Streamlit UI]
-      UI --> Orchestrator[Deal logic and routing]
-      Orchestrator -->|Exact game| CheapShark[CheapShark API]
-      Orchestrator -->|Similar games| Chroma[Chroma Vector Store]
-      Orchestrator --> Ollama[Ollama LLM + Embeddings]
-      CheapShark --> UI
-      Chroma --> Orchestrator
-      Ollama --> Orchestrator
-```
-
 ## Project Structure
 
 ```text
@@ -113,12 +99,6 @@ python scripts/pinecone_setup.py
 streamlit run main.py
 ```
 
-If port 8501 is busy, use:
-
-```bash
-streamlit run main.py --server.port 8502
-```
-
 ## Example Queries
 
 - Where can I get GTA V the cheapest?
@@ -141,11 +121,28 @@ streamlit run main.py --server.port 8502
 
 ## Screenshots
 
+#Home
 ![Home](docs/screenshots/home.png)
 
+#Exact Game Pricing  
 ![Exact game pricing](docs/screenshots/exact_game_pricing.png)
 
+#Similar Games Recommendation
 ![Similar games recommendations](docs/screenshots/similar_games_reccommendation.png)
+
+## Architecture
+
+```mermaid
+flowchart TD
+      User[User] --> UI[Streamlit UI]
+      UI --> Orchestrator[Deal logic and routing]
+      Orchestrator -->|Exact game| CheapShark[CheapShark API]
+      Orchestrator -->|Similar games| Chroma[Chroma Vector Store]
+      Orchestrator --> Ollama[Ollama LLM + Embeddings]
+      CheapShark --> UI
+      Chroma --> Orchestrator
+      Ollama --> Orchestrator
+```
 
 ## License
 
