@@ -7,7 +7,7 @@ __pycache__/
 .streamlit/
 !.streamlit/config.toml
 .vscode/
-/docs/
+/docs/project_guide.html
 /vibe_code_roadmap_pinecone.md
 .cache/
 /data/cache/

@@ -83,6 +83,7 @@ def run_app() -> None:
     st.markdown(
         """
         <style>
+        /* Cache bust: 2026-06-01 */
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono&display=swap');
         :root {
             --neon-cyan: #19f5ff;
@@ -152,7 +153,7 @@ def run_app() -> None:
         }
         .hero-strip {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 12px;
             margin-top: 20px;
             position: relative;
@@ -219,13 +220,15 @@ def run_app() -> None:
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 16px;
-            margin-top: 14px;
+            margin-top: 24px;
         }
         .deal-card {
             background: rgba(16, 20, 32, 0.78);
             border: 1px solid rgba(25, 245, 255, 0.12);
             border-radius: 20px;
             padding: 18px;
+            margin-top: 0 !important;
+            margin-bottom: 16px;
         }
         .deal-card-top {
             display: flex;
@@ -267,10 +270,40 @@ def run_app() -> None:
             font-size: 0.86rem;
         }
         .deal-link {
-            display: inline-block;
-            margin-top: 14px;
-            color: var(--cyan, var(--neon-cyan));
-            font-size: 0.93rem;
+            display: inline-block !important;
+            margin-top: 14px !important;
+            padding: 10px 18px !important;
+            border-radius: 12px !important;
+            background: transparent !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            font-size: 1.02rem !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            cursor: pointer !important;
+            transition: background 0.2s, border-color 0.2s !important;
+        }
+        .deal-link:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+        .deal-store-btn {
+            display: inline-block !important;
+            margin-top: 12px !important;
+            padding: 10px 18px !important;
+            border-radius: 12px !important;
+            background: transparent !important;
+            color: #ffffff !important;
+            text-decoration: none !important;
+            font-weight: 600 !important;
+            font-size: 1.02rem !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            cursor: pointer !important;
+            transition: background 0.2s, border-color 0.2s !important;
+        }
+        .deal-store-btn:hover {
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
         }
         .deal-card .small {
             line-height: 1.45;
@@ -326,7 +359,14 @@ def run_app() -> None:
             box-shadow: 0 16px 40px rgba(3, 7, 18, 0.55);
         }
         div[data-testid="metric-container"] {
-            padding: 14px 16px;
+            padding: 14px 16px !important;
+            text-align: center !important;
+        }
+        div[data-testid="metric-container"] > div {
+            text-align: center !important;
+        }
+        div[data-testid="metric-container"] > div > div {
+            text-align: center !important;
         }
         div[data-testid="stAlert"] > div {
             padding: 12px 16px;
@@ -397,10 +437,6 @@ def run_app() -> None:
                 <div class="hero-chip">
                     <span class="hero-chip-title">Also does</span>
                     <div class="hero-chip-text">Similar-game discovery when you want ideas.</div>
-                </div>
-                <div class="hero-chip">
-                    <span class="hero-chip-title">Output</span>
-                    <div class="hero-chip-text">Best deal first, then every available store link.</div>
                 </div>
             </div>
         </div>
@@ -515,7 +551,7 @@ def run_app() -> None:
                         <h2 class="section-title">{best_rec.game.title}</h2>
                     </div>
                 </div>
-                <a class="deal-link" href="{best_url}" target="_blank">Open best deal</a>
+                    <a class="deal-link" href="{best_url}" target="_blank">Open store</a>
             </div>
             """,
             unsafe_allow_html=True,
@@ -528,7 +564,13 @@ def run_app() -> None:
 
         st.markdown("<div class='results-grid'>", unsafe_allow_html=True)
         rows = sorted(results.recommendations, key=lambda rec: rec.deal.sale_price)
+        rows = [rec for rec in rows if rec.deal.deal_id != best_rec.deal.deal_id]
+        seen_stores: set[str] = set()
         for rec in rows:
+            store_key = (rec.store_name or "unknown").strip().lower()
+            if store_key in seen_stores:
+                continue
+            seen_stores.add(store_key)
             link = f"https://www.cheapshark.com/redirect?dealID={rec.deal.deal_id}"
             st.markdown(
                 f"""
@@ -544,7 +586,7 @@ def run_app() -> None:
                         <span>Savings {rec.discount_percent or 0:.0f}%</span>
                         <span>Rating {rec.deal.deal_rating:.1f}</span>
                     </div>
-                    <a class="deal-link" href="{link}" target="_blank">Open store deal</a>
+                    <a class="deal-store-btn" href="{link}" target="_blank">Open store</a>
                 </div>
                 """,
                 unsafe_allow_html=True,
