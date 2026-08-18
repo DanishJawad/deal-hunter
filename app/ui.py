@@ -611,7 +611,7 @@ def run_app() -> None:
                     <div class="deal-card-top">
                         <div>
                             <div class="deal-game">{rec.game.title}</div>
-                            <div class="deal-store">{rec.store_name or 'Unknown'} · Metacritic {rec.game.metacritic_score or 'N/A'}</div>
+                            <div class="deal-store">{rec.store_name or 'Unknown'} · Metacritic {rec.deal.metacritic_score or 'N/A'}</div>
                         </div>
                         <div class="deal-price">${rec.deal.sale_price:.2f}</div>
                     </div>
