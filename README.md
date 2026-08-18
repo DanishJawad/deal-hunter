@@ -55,8 +55,10 @@ flowchart TD
 ├── scripts/            # dataset and vectorstore setup scripts
 ├── main.py             # Streamlit entry point
 ├── README.md           # this guide
-├── pyproject.toml      # project metadata
-├── requirements.txt    # dependency list
+├── pyproject.toml      # project metadata and dependency ranges
+├── uv.lock             # exact pinned dependency versions (source of truth for installs)
+├── Dockerfile          # builds the app from uv.lock
+├── docker-compose.yml  # runs the app against a host-machine Ollama
 └── .streamlit/         # Streamlit config
 ```
 
@@ -137,7 +139,13 @@ streamlit run main.py --server.port 8502
 ## Deployment Notes
 
 - Local: `streamlit run main.py` with Ollama running.
-- Cloud: Streamlit can be deployed, but Ollama still needs to run locally.
+- Docker: `docker compose up --build` builds the image from `uv.lock` and runs the
+  app against your host machine's Ollama (`http://host.docker.internal:11434`) and
+  the persisted Chroma index in `./data`, both mounted into the container. Ollama
+  still has to be running on the host; the container does not bundle it.
+- The app has not been deployed to a public endpoint. Any hosted deployment (Streamlit
+  Community Cloud, etc.) would still need a reachable Ollama instance, which is the
+  main blocker to hosting this publicly as-is.
 
 ## Screenshots
 
