@@ -59,13 +59,13 @@ def load_config() -> AppConfig:
     return AppConfig(
         pinecone_api_key=os.getenv("PINECONE_API_KEY", ""),
         vectorstore_backend=os.getenv("VECTORSTORE_BACKEND", "chroma"),
-        pinecone_index_name=os.getenv("PINECONE_INDEX_NAME", "games"),
+        pinecone_index_name=os.getenv("PINECONE_INDEX_NAME", "deal-hunter"),
         pinecone_cloud=os.getenv("PINECONE_CLOUD", "aws"),
         pinecone_region=os.getenv("PINECONE_REGION", "us-east-1"),
         ollama_base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
-        ollama_chat_model=os.getenv("OLLAMA_CHAT_MODEL", "mistral"),
+        ollama_chat_model=os.getenv("OLLAMA_CHAT_MODEL", "llama3.2:latest"),
         ollama_embed_model=os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text"),
-        ollama_embed_dim=int(os.getenv("OLLAMA_EMBED_DIM", "384")),
+        ollama_embed_dim=int(os.getenv("OLLAMA_EMBED_DIM", "768")),
         cheapshark_base_url=os.getenv("CHEAPSHARK_BASE_URL", "https://www.cheapshark.com/api/1.0"),
         cheapshark_user_agent=os.getenv(
             "CHEAPSHARK_USER_AGENT",
