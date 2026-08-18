@@ -68,7 +68,7 @@ flowchart TD
 | --- | --- |
 | `main.py` | Launches the Streamlit app. |
 | `app/ui.py` | Builds the full user interface. |
-| `app/agent.py` | Coordinates exact-game and discovery flows. |
+| `app/agent.py` | Coordinates exact-game and discovery flows, and generates the grounded result explanation. |
 | `app/cheapshark.py` | Talks to CheapShark and returns live deals. |
 | `app/vectorstore.py` | Handles vector-store search and persistence. |
 | `app/games_db.py` | Loads the game catalog and resolves aliases. |
