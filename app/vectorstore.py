@@ -240,15 +240,15 @@ class ChromaStore:
 
     def search_similar_games(self, query: str, top_k: int = 5, genres: list[str] | None = None) -> list[Game]:
         vector = embed_text(query)
-        where = None
-        if genres:
-            where = {"genres": {"$in": genres}}
+        # Chroma's `where` filter only matches scalar metadata fields; "genres" is
+        # stored as a list per game, so genre filtering is done client-side on the
+        # over-fetched candidate set instead of pushed down to the query.
+        fetch_k = top_k * 4 if genres else top_k
         try:
             results = self.collection.query(
                 query_embeddings=[vector],
-                n_results=top_k,
+                n_results=fetch_k,
                 include=["metadatas", "distances"],
-                where=where,
             )
         except Exception as exc:
             raise PineconeError("Chroma query failed") from exc
@@ -260,13 +260,18 @@ class ChromaStore:
         ids = raw_ids[0] if raw_ids and isinstance(raw_ids[0], list) else raw_ids
         metadatas = raw_metadatas[0] if raw_metadatas and isinstance(raw_metadatas[0], list) else raw_metadatas
 
+        wanted_genres = {genre.lower() for genre in genres} if genres else None
+
         for idx, _id in enumerate(ids):
             metadata = metadatas[idx] if idx < len(metadatas) and isinstance(metadatas[idx], dict) else {}
+            game_genres = list(metadata.get("genres") or [])
+            if wanted_genres and not ({g.lower() for g in game_genres} & wanted_genres):
+                continue
             matches.append(
                 Game(
                     game_id=_id,
                     title=metadata.get("title") or "",
-                    genres=list(metadata.get("genres") or []),
+                    genres=game_genres,
                     description=metadata.get("description"),
                     tags=list(metadata.get("tags") or []),
                     aliases=list(metadata.get("aliases") or []),
@@ -274,6 +279,8 @@ class ChromaStore:
                     metacritic_score=metadata.get("metacritic_score"),
                 )
             )
+            if len(matches) >= top_k:
+                break
         return matches
 
 
