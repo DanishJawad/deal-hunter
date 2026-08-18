@@ -629,4 +629,6 @@ def run_app() -> None:
     with st.expander("Why these? (Agent reasoning)"):
         st.write(agent_summary or "No reasoning available.")
 
-    st.caption("All processing done locally with Ollama + Pinecone (zero API costs)")
+    backend = (config.vectorstore_backend or "pinecone").lower()
+    backend_label = "Chroma" if backend == "chroma" else "Pinecone"
+    st.caption(f"All processing done locally with Ollama + {backend_label} (zero API costs)")
