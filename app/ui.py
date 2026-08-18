@@ -7,7 +7,7 @@ from pathlib import Path
 
 import streamlit as st
 
-from .agent import build_agent_executor, build_llm, build_tools, get_recommendations, run_deal_agent_sync
+from .agent import build_llm, generate_result_reasoning, get_recommendations
 from .cheapshark import CheapSharkClient
 from .config import AppConfig, load_config
 from .error_handler import AppError, friendly_error_message
@@ -511,9 +511,7 @@ def run_app() -> None:
                 search_fn=cached_similar_games if store is not None else None,
             )
             llm = get_llm()
-            tools = build_tools(cheapshark, store, lookup, store_map)
-            executor = build_agent_executor(llm, tools)
-            agent_summary = run_deal_agent_sync(query, executor)
+            agent_summary = generate_result_reasoning(llm, query, results.recommendations)
 
     except AppError as exc:
         LOGGER.exception("Search failed")
