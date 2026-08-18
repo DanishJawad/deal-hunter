@@ -149,12 +149,11 @@ streamlit run main.py --server.port 8502
 
 ## Screenshots
 
-Replace these placeholders with your final images when you’re ready:
+![Home](docs/screenshots/home.png)
 
-![Screenshot 1: Home](docs/screenshots/screenshot-1-home.png)
-![Screenshot 2: Search form filled](docs/screenshots/screenshot-2-search.png)
-![Screenshot 3: Exact game pricing](docs/screenshots/screenshot-3-exact.png)
-![Screenshot 4: Similar games recommendations](docs/screenshots/screenshot-4-similar.png)
+![Exact game pricing](docs/screenshots/exact_game_pricing.png)
+
+![Similar games recommendations](docs/screenshots/similar_games_reccommendation.png)
 
 ## License
 
