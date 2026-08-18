@@ -8,7 +8,6 @@ __pycache__/
 !.streamlit/config.toml
 .vscode/
 /docs/project_guide.html
-/vibe_code_roadmap_pinecone.md
 .cache/
 /data/cache/
 /data/games.json
