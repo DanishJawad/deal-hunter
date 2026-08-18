@@ -458,9 +458,7 @@ def run_app() -> None:
             submitted = st.form_submit_button("Find Deals")
 
     if not submitted:
-        backend = (config.vectorstore_backend or "pinecone").lower()
-        backend_label = "Chroma" if backend == "chroma" else "Pinecone"
-        st.caption(f"Using local Ollama model + {backend_label}")
+        st.caption("Using local Ollama model + Chroma")
         return
 
     if not query.strip():
@@ -527,9 +525,7 @@ def run_app() -> None:
 
     if not results.recommendations:
         st.info("No deals found. Try a different game or higher max price.")
-        backend = (config.vectorstore_backend or "pinecone").lower()
-        backend_label = "Chroma" if backend == "chroma" else "Pinecone"
-        st.caption(f"Using local Ollama model + {backend_label}")
+        st.caption("Using local Ollama model + Chroma")
         return
 
     if results.is_exact_game:
@@ -629,6 +625,4 @@ def run_app() -> None:
     with st.expander("Why these? (Agent reasoning)"):
         st.write(agent_summary or "No reasoning available.")
 
-    backend = (config.vectorstore_backend or "pinecone").lower()
-    backend_label = "Chroma" if backend == "chroma" else "Pinecone"
-    st.caption(f"All processing done locally with Ollama + {backend_label} (zero API costs)")
+    st.caption("All processing done locally with Ollama + Chroma (zero API costs)")

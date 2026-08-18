@@ -2,7 +2,7 @@
 
 Deal Hunter finds the cheapest current PC game deals and handles similar-game discovery when you want recommendations instead of an exact title.
 
-The app uses local Ollama for reasoning, CheapShark for live pricing, and persistent local Chroma for semantic search. Pinecone is still supported as an optional cloud backend, but the current working setup is Chroma-first.
+The app uses local Ollama for reasoning, CheapShark for live pricing, and persistent local Chroma for semantic search.
 
 ## What It Does
 
@@ -25,7 +25,7 @@ The app uses local Ollama for reasoning, CheapShark for live pricing, and persis
 User types a query in Streamlit
   -> app checks whether it is an exact game query
   -> exact game: fetch all CheapShark deals for that title
-  -> discovery query: use the configured vector store (currently Chroma, Pinecone optional) to find similar games
+  -> discovery query: use Chroma to find similar games
   -> rank results and build explanations
   -> show best deal first with store links
 ```
@@ -81,18 +81,14 @@ User types a query in Streamlit
    uv sync
    ```
 5. Copy `.env.example` to `.env`.
-6. Set `VECTORSTORE_BACKEND=chroma` and `CHROMA_PERSIST_DIR=./data/chroma_persist` for the current local build.
-7. Set `PINECONE_API_KEY` only if you want to use Pinecone instead of Chroma.
+6. Set `CHROMA_PERSIST_DIR=./data/chroma_persist`.
 
 ## Build the Data
 
 ```bash
 python scripts/build_games_database.py
 python scripts/generate_game_embeddings.py
-# Current default: Chroma (local)
 python scripts/chroma_setup.py
-# Optional cloud alternative
-python scripts/pinecone_setup.py
 ```
 
 ## Run the App
@@ -113,7 +109,7 @@ streamlit run main.py
 - The vector database improves discovery, not the size of the catalog.
 - For a direct title query, Deal Hunter shows one game only.
 - For similar-game queries, it shows the best matching games and current prices.
-- Chroma is the active local backend right now; Pinecone remains supported as an optional alternative.
+- Chroma is the only vector store backend.
 - If the query includes a price limit (for example, "under $20"), only deals at or below that amount are returned.
 
 ## Deployment Notes

@@ -107,7 +107,7 @@ def main() -> None:
     init_ollama()
 
     client = init_chroma(config.chroma_persist_dir)
-    collection = create_game_collection(client, config.pinecone_index_name)
+    collection = create_game_collection(client, config.chroma_collection_name)
 
     embeddings_path = Path(config.games_embeddings_path)
     if not embeddings_path.exists():

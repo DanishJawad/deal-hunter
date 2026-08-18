@@ -8,7 +8,7 @@ from langchain_ollama import ChatOllama
 
 from .cheapshark import CheapSharkClient
 from .deal_logic import build_recommendation, personalize_recommendations
-from .error_handler import PineconeError
+from .error_handler import VectorStoreError
 from .games_db import (
     GameLookup,
     find_game_by_name,
@@ -20,7 +20,7 @@ from .games_db import (
 from .models import Game, Recommendation
 from .nlp import extract_price_limit
 from .prompts import AGENT_SYSTEM_PROMPT
-from .vectorstore import PineconeStore
+from .vectorstore import ChromaStore
 
 LOGGER = logging.getLogger(__name__)
 
@@ -89,7 +89,7 @@ def get_recommendations(
     max_price: float,
     lookup: GameLookup,
     cheapshark: CheapSharkClient,
-    store: PineconeStore | None,
+    store: ChromaStore | None,
     store_map: dict[str, str],
     price_history_path,
     favorite_genres: list[str],
@@ -142,7 +142,7 @@ def get_recommendations(
                         query=alias_match.title if alias_match else query,
                         top_k=limit,
                     )
-            except PineconeError:
+            except VectorStoreError:
                 games = search_by_keyword(query, lookup, limit=limit)
 
     suggestions: list[str] = []

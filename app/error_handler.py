@@ -19,8 +19,8 @@ class CheapSharkError(AppError):
     """Raised when CheapShark API requests fail."""
 
 
-class PineconeError(AppError):
-    """Raised when Pinecone operations fail."""
+class VectorStoreError(AppError):
+    """Raised when vector store operations fail."""
 
 
 class GameDataError(AppError):
@@ -55,8 +55,8 @@ def retry_with_backoff(
 def friendly_error_message(exc: BaseException) -> str:
     if isinstance(exc, OllamaNotRunningError):
         return "Ollama is not running. Start Ollama with: ollama serve"
-    if isinstance(exc, PineconeError):
-        return "Pinecone is unavailable. Falling back to keyword search."
+    if isinstance(exc, VectorStoreError):
+        return "Vector search is unavailable. Falling back to keyword search."
     if isinstance(exc, CheapSharkError):
         return "CheapShark is unavailable. Please try again in a moment."
     if isinstance(exc, GameDataError):
